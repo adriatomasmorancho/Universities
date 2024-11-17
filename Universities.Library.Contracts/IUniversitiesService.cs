@@ -6,5 +6,11 @@ namespace Universities.Library.Contracts
     {
         Task<MigrateAllRsDto> MigrateAllAsync();
 
+        ListAllRsDto ListAllAsync();
+
+        List<UniversityNameAndWebpageListDto> FilterByName(string name);
+
+        List<UniversityNameDto> FilterByAlphaTwoCode(string alphaTwoCode);
+
     }
 }

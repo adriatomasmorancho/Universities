@@ -10,5 +10,11 @@ namespace Universities.Infrastructure.Contracts
     public interface IUniversitiesDBRepository
     {
         void SaveAll(List<University> dataToSave);
+        List<University> GetAll();
+
+        List<University> GetByName(string name);
+
+        List<University> GetByAlphaTwoCode(string alphaTwoCode);
+
     }
 }

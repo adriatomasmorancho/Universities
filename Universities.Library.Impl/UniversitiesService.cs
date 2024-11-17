@@ -105,6 +105,68 @@ namespace Universities.Library.Impl
             return dbEntityList;
         }
         #endregion
+
+        #region ListAll
+        public ListAllRsDto ListAllAsync()
+        {
+            ListAllRsDto result = new();
+
+            List<University> resultFromRepository =
+                        _universitiesDBRepository.GetAll();
+            result.data = MapWebApiEntityListToDtoList(resultFromRepository);
+
+            return result;
+        }
+
+        private static List<UniversityNameAndCountryDto> MapWebApiEntityListToDtoList(
+            List<University> dbEntityList)
+        {
+            return dbEntityList.Select(x => new UniversityNameAndCountryDto()
+            {
+                Name = x.Name,
+                Country = x.Country
+            }).ToList();
+        }
+        #endregion
+
+        #region FilterByName
+        public List<UniversityNameAndWebpageListDto> FilterByName(string name)
+        {
+            List<University> resultFromRepository =
+                        _universitiesDBRepository.GetByName(name);
+
+            return MapDbEntityListToUniversityNameAndWebpageDtoList(resultFromRepository);
+        }
+
+        private static List<UniversityNameAndWebpageListDto> MapDbEntityListToUniversityNameAndWebpageDtoList(
+            List<University> dbEntityList)
+        {
+            return dbEntityList.Select(x => new UniversityNameAndWebpageListDto()
+            {
+                Name = x.Name,
+                WebpageList = x.WebPages.Select(x => x.WebPageName).ToList()
+            }).ToList();
+        }
+        #endregion
+
+        #region FilterByAlphaTwoCode
+        public List<UniversityNameDto> FilterByAlphaTwoCode(string alphaTwoCode)
+        {
+            List<University> resultFromRepository =
+                        _universitiesDBRepository.GetByAlphaTwoCode(alphaTwoCode);
+            return MapDbEntityListToUniversityNameDtoList(resultFromRepository);
+        }
+
+        private static List<UniversityNameDto> MapDbEntityListToUniversityNameDtoList(
+            List<University> dbEntityList)
+        {
+            return dbEntityList.Select(x => new UniversityNameDto()
+            {
+                Name = x.Name
+            }).ToList();
+        }
+        #endregion
+
     }
 }
 
