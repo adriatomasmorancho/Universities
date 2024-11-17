@@ -1,3 +1,10 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Universities.Infrastructure.Contracts;
+using Universities.Infrastructure.Impl;
+using Universities.Infrastructure.Impl.DbContext;
+using Universities.Library.Contracts;
+using Universities.Library.Impl;
+
 namespace Universities.DistributedServices.WebApiUI
 {
     public class Program
@@ -8,7 +15,18 @@ namespace Universities.DistributedServices.WebApiUI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services
+          .AddScoped<IUniversitiesApiRepository, UniversitiesApiRepository>()
+          .AddScoped<IUniversitiesDBRepository, UniversitiesDBRepository>()
+          .AddScoped<IUniversitiesService, UniversitiesService>();
+
+            builder.Services.AddDbContext<UniversityDBContext>(options =>
+           options.UseSqlServer("Data Source=074BCN2024\\SQLEXPRESS;Initial Catalog=UniversityDB;User ID=adria;Password=1234;Trust Server Certificate=True"));
+
+
+
+            builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
